@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Institute of Technology & Sciences</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            900: '#0a192f', // Deep Navy Blue
+                            800: '#112240',
+                            700: '#233554',
+                        },
+                        accent: {
+                            500: '#fbbf24', // Warm Gold
+                            600: '#f59e0b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Glassmorphism Navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        
+        /* Hero Section with Overlay */
+        .hero-bg {
+            background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat fixed;
+        }
+
+        /* Hide Scrollbar for ticker */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Smooth reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal Styles */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: all 0.3s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        body.modal-open { overflow: hidden; }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+        }
+        .ticker-content:hover { animation-play-state: paused; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased overflow-x-hidden">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-brand-900 text-white text-sm py-2 overflow-hidden relative w-full border-b border-brand-700">
+        <div class="container mx-auto px-4 flex items-center">
+            <span class="bg-accent-500 text-brand-900 font-bold px-3 py-1 rounded text-xs mr-4 whitespace-nowrap z-10 relative">UPDATES</span>
+            <div class="overflow-hidden flex-grow">
+                <div class="ticker-content text-gray-200">
+                    <span class="mr-8"><i class="fas fa-bell text-accent-500 mr-2"></i>[URGENT] Semester Exams starting from Nov 15</span>
+                    <span class="mr-8"><i class="fas fa-star text-accent-500 mr-2"></i>[NEW] Campus Placement Drive by TechCorp on Dec 1st</span>
+                    <span class="mr-8"><i class="fas fa-bullhorn text-accent-500 mr-2"></i>Admissions open for 2027-28 batch. Apply now!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 top-10" id="navbar">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-12 h-12 bg-brand-900 rounded-lg flex items-center justify-center text-white font-bold text-2xl mr-3 shadow-lg">
+                        GI
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-xl leading-tight text-brand-900">Global Institute</h1>
+                        <p class="text-xs text-gray-500 font-medium tracking-wide">OF TECHNOLOGY & SCIENCES</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex space-x-1 items-center">
+                    <a href="#home" class="px-3 py-2 text-sm font-semibold text-brand-900 hover:text-accent-600 transition">Home</a>
+                    <a href="#about" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">About Us</a>
+                    <a href="#academics" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Academics</a>
+                    <a href="#admissions" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Admissions</a>
+                    <a href="#campus-life" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Campus Life</a>
+                    <a href="#placements" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Placements</a>
+                    <a href="#research" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Research</a>
+                    <a href="#contact" class="px-3 py-2 text-sm font-semibold text-gray-600 hover:text-brand-900 transition">Contact</a>
+                    
+                    <button onclick="openModal('login-modal')" class="ml-4 flex items-center text-brand-900 font-bold border-2 border-brand-900 px-4 py-2 rounded-full hover:bg-brand-900 hover:text-white transition duration-300">
+                        <i class="fas fa-user-graduate mr-2"></i> Portal Login
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-900 focus:outline-none p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="lg:hidden hidden bg-white border-t border-gray-100 shadow-xl absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-1 max-h-[80vh] overflow-y-auto">
+                <a href="#home" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-brand-900 hover:bg-gray-50">Home</a>
+                <a href="#about" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">About Us</a>
+                <a href="#academics" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Academics</a>
+                <a href="#admissions" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Admissions</a>
+                <a href="#campus-life" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Campus Life</a>
+                <a href="#placements" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Placements</a>
+                <a href="#research" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Research & Innovation</a>
+                <a href="#contact" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-brand-900">Contact Us</a>
+                <button onclick="openModal('login-modal')" class="mt-4 w-full flex justify-center items-center text-white bg-brand-900 font-bold px-4 py-3 rounded-lg">
+                    <i class="fas fa-user-graduate mr-2"></i> Student Portal
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 hero-bg flex items-center min-h-screen">
+        <div class="container mx-auto px-4 relative z-10 text-center lg:text-left">
+            <div class="max-w-3xl">
+                <span class="inline-block py-1 px-3 rounded-full bg-brand-800/80 text-accent-500 font-semibold text-sm mb-6 border border-brand-700 backdrop-blur-sm">
+                    <i class="fas fa-award mr-2"></i> Ranked #1 in Tech Education 2026
+                </span>
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
+                    Empowering Minds, <br> <span class="text-accent-500">Shaping the Future.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl leading-relaxed">
+                    Join a diverse community of innovators and leaders. Experience world-class academics, vibrant campus life, and outstanding placement opportunities.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <button onclick="openModal('apply-modal')" class="px-8 py-4 bg-accent-500 hover:bg-accent-600 text-brand-900 font-bold rounded-lg text-lg transition duration-300 transform hover:-translate-y-1 shadow-lg shadow-accent-500/30">
+                        Apply Now 2027
+                    </button>
+                    <a href="#campus-life" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg text-lg backdrop-blur-sm border border-white/20 transition duration-300 transform hover:-translate-y-1 flex items-center justify-center">
+                        <i class="fas fa-play-circle mr-2 text-xl"></i> Virtual Tour
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Banner overlapping hero and next section -->
+        <div class="absolute -bottom-16 left-0 w-full px-4 z-20 hidden md:block">
+            <div class="container mx-auto">
+                <div class="bg-white rounded-2xl shadow-2xl p-8 grid grid-cols-4 gap-6 divide-x divide-gray-100 border border-gray-100">
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-black text-brand-900 mb-1 counter" data-target="95">0</div><span class="text-3xl font-bold text-brand-900">%</span>
+                        <p class="text-gray-500 font-medium mt-1">Placement Rate</p>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-black text-brand-900 mb-1 counter" data-target="150">0</div><span class="text-3xl font-bold text-brand-900">+</span>
+                        <p class="text-gray-500 font-medium mt-1">Recruiting Partners</p>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-black text-brand-900 mb-1 counter" data-target="50">0</div><span class="text-3xl font-bold text-brand-900">Ac</span>
+                        <p class="text-gray-500 font-medium mt-1">Lush Green Campus</p>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="text-4xl font-black text-brand-900 mb-1 counter" data-target="20">0</div><span class="text-3xl font-bold text-brand-900">+</span>
+                        <p class="text-gray-500 font-medium mt-1">Research Centers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-24 bg-white relative reveal">
+        <div class="container mx-auto px-4 md:mt-16">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <div class="lg:w-1/2 relative">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Campus Building" class="rounded-2xl shadow-xl w-full object-cover h-[500px]">
+                    <div class="absolute -bottom-8 -right-8 bg-brand-900 p-8 rounded-2xl shadow-2xl hidden md:block">
+                        <div class="text-accent-500 text-5xl font-black mb-2">25+</div>
+                        <div class="text-white font-medium text-lg">Years of<br>Academic Excellence</div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-4 py-1 rounded-full text-sm mb-4">ABOUT US</div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">Nurturing Leaders for a <br><span class="text-brand-900 relative">Better Tomorrow
+                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-accent-500 z-[-1]" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="4" fill="none"/></svg>
+                    </span></h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed text-lg">
+                        Global Institute of Technology & Sciences is a premier institution dedicated to imparting quality education and fostering innovation. Established with a vision to create global professionals, we blend rigorous academics with practical exposure.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-brand-900 text-xl flex-shrink-0 mr-4">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1">Our Vision</h4>
+                                <p class="text-sm text-gray-600">To be a globally recognized center of excellence in education and research.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-brand-900 text-xl flex-shrink-0 mr-4">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 mb-1">Our Mission</h4>
+                                <p class="text-sm text-gray-600">Empowering students with knowledge, skills, and ethical values for holistic growth.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 border-l-4 border-accent-500 pl-6 py-2">
+                        <p class="italic text-gray-700 font-medium mb-3">"Education is not just about gathering knowledge, but learning how to think and solve real-world problems."</p>
+                        <p class="font-bold text-brand-900">- Dr. Robert Chen, Principal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academics Section -->
+    <section id="academics" class="py-24 bg-gray-50 reveal">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-4 py-1 rounded-full text-sm mb-4">ACADEMICS</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Discover Our Programs</h2>
+                <p class="text-gray-600 text-lg">Comprehensive curriculum designed in collaboration with industry experts to ensure you are future-ready.</p>
+            </div>
+
+            <!-- Course Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 text-brand-900 text-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-900">Computer Science</h3>
+                    <p class="text-brand-900 font-medium text-sm mb-1">B.Tech • 4 Years</p>
+                    <p class="text-gray-500 text-sm mb-6">AI, Machine Learning, Cloud Computing, and Cybersecurity.</p>
+                    <button onclick="openModal('course-modal')" class="text-brand-900 font-bold group-hover:text-accent-600 transition flex items-center">
+                        View Details <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 text-brand-900 text-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-900">Mechanical Eng.</h3>
+                    <p class="text-brand-900 font-medium text-sm mb-1">B.Tech • 4 Years</p>
+                    <p class="text-gray-500 text-sm mb-6">Robotics, Thermodynamics, and Advanced Manufacturing.</p>
+                    <button onclick="openModal('course-modal')" class="text-brand-900 font-bold group-hover:text-accent-600 transition flex items-center">
+                        View Details <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 text-brand-900 text-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-900">Electronics</h3>
+                    <p class="text-brand-900 font-medium text-sm mb-1">B.Tech • 4 Years</p>
+                    <p class="text-gray-500 text-sm mb-6">VLSI Design, IoT, Embedded Systems, and Signal Processing.</p>
+                    <button onclick="openModal('course-modal')" class="text-brand-900 font-bold group-hover:text-accent-600 transition flex items-center">
+                        View Details <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 text-brand-900 text-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-900">Commerce & Mgmt.</h3>
+                    <p class="text-brand-900 font-medium text-sm mb-1">BBA/MBA • 3/2 Years</p>
+                    <p class="text-gray-500 text-sm mb-6">Finance, Marketing, HR, and International Business.</p>
+                    <button onclick="openModal('course-modal')" class="text-brand-900 font-bold group-hover:text-accent-600 transition flex items-center">
+                        View Details <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block border-2 border-brand-900 text-brand-900 font-bold px-8 py-3 rounded-lg hover:bg-brand-900 hover:text-white transition duration-300">
+                    Download Full Course Catalog
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admissions Section -->
+    <section id="admissions" class="py-24 bg-brand-900 text-white relative reveal">
+        <!-- Abstract shape -->
+        <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+            <svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#ffffff" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,81.3,-46.3C90.8,-33.5,96.8,-18,97.5,-2.2C98.2,13.6,93.6,29.6,83.9,43.2C74.2,56.8,59.4,68,43.6,75.3C27.8,82.6,11.1,86,-5.3,85.6C-21.7,85.2,-37.9,81.1,-52.1,72.6C-66.3,64.1,-78.6,51.3,-86.3,36.2C-94,21.1,-97.1,3.7,-93.8,-12.4C-90.5,-28.5,-80.8,-43.3,-67.9,-54.6C-55,-65.9,-39,-73.7,-23.7,-78.1C-8.4,-82.5,6.2,-83.5,20.6,-80.4C35,-77.3,44.7,-76.4,44.7,-76.4Z" transform="translate(100 100)" />
+            </svg>
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Begin Your Journey With Us</h2>
+                    <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+                        We look for passionate, driven individuals ready to make an impact. Our admission process is transparent, merit-based, and designed to identify true potential.
+                    </p>
+                    
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-accent-500 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Eligibility Criteria</h4>
+                                <p class="text-gray-400 text-sm">Minimum 60% aggregate in 10+2 with Science/Maths focus for B.Tech.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-accent-500 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Scholarships Available</h4>
+                                <p class="text-gray-400 text-sm">Up to 100% tuition fee waiver for meritorious and economically weak students.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-accent-500 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Easy Application</h4>
+                                <p class="text-gray-400 text-sm">100% online application process with dedicated counseling support.</p>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="openModal('apply-modal')" class="px-8 py-3 bg-accent-500 hover:bg-accent-600 text-brand-900 font-bold rounded-lg transition duration-300 shadow-lg">
+                            Apply Online Now
+                        </button>
+                        <button class="px-8 py-3 bg-transparent border-2 border-white hover:bg-white hover:text-brand-900 text-white font-bold rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-file-pdf mr-2"></i> Fee Structure
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2 w-full">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 text-white text-center">Admission Enquiry</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <input type="text" placeholder="Full Name" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition">
+                            </div>
+                            <div>
+                                <input type="email" placeholder="Email Address" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition">
+                            </div>
+                            <div>
+                                <input type="tel" placeholder="Phone Number" class="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition">
+                            </div>
+                            <div>
+                                <select class="w-full px-4 py-3 bg-brand-800 border border-white/20 rounded-lg text-white focus:outline-none focus:border-accent-500 transition">
+                                    <option value="" disabled selected>Select Program of Interest</option>
+                                    <option value="cs">B.Tech Computer Science</option>
+                                    <option value="me">B.Tech Mechanical</option>
+                                    <option value="ee">B.Tech Electronics</option>
+                                    <option value="mba">MBA</option>
+                                </select>
+                            </div>
+                            <button type="button" class="w-full py-3 bg-white text-brand-900 font-bold rounded-lg hover:bg-gray-100 transition duration-300 mt-2">
+                                Request Information
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campus Life Section -->
+    <section id="campus-life" class="py-24 bg-white reveal">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-end mb-12 flex-wrap gap-4">
+                <div class="max-w-2xl">
+                    <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-4 py-1 rounded-full text-sm mb-4">CAMPUS LIFE</div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Experience the Vibrancy</h2>
+                    <p class="text-gray-600 text-lg">Beyond classrooms, a world of sports, arts, tech clubs, and cultural fests awaits you.</p>
+                </div>
+                <!-- Filter Tabs -->
+                <div class="flex space-x-2 overflow-x-auto pb-2 hide-scroll">
+                    <button class="px-5 py-2 bg-brand-900 text-white rounded-full text-sm font-semibold whitespace-nowrap filter-btn active" data-filter="all">All</button>
+                    <button class="px-5 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-full text-sm font-semibold whitespace-nowrap filter-btn" data-filter="infra">Infrastructure</button>
+                    <button class="px-5 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-full text-sm font-semibold whitespace-nowrap filter-btn" data-filter="sports">Sports</button>
+                    <button class="px-5 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 rounded-full text-sm font-semibold whitespace-nowrap filter-btn" data-filter="events">Events</button>
+                </div>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Item 1 -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-sm h-72 gallery-item infra">
+                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Library" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900/90 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-xl">Central Library</h4>
+                        <p class="text-gray-300 text-sm">24/7 Access • 100k+ Volumes</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-sm h-72 gallery-item events">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Tech Fest" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900/90 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-xl">Annual Tech Fest</h4>
+                        <p class="text-gray-300 text-sm">Innovate 2025</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-sm h-72 gallery-item sports">
+                    <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sports Arena" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900/90 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-xl">Sports Complex</h4>
+                        <p class="text-gray-300 text-sm">Indoor & Outdoor Facilities</p>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-sm h-72 gallery-item infra">
+                    <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hostel" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900/90 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-xl">Modern Hostels</h4>
+                        <p class="text-gray-300 text-sm">Comfortable Living Spaces</p>
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="relative group rounded-2xl overflow-hidden shadow-sm h-72 gallery-item events lg:col-span-2">
+                    <img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Cultural Fest" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900/90 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-6">
+                        <h4 class="text-white font-bold text-xl">Cultural Extravaganza</h4>
+                        <p class="text-gray-300 text-sm">Celebrating Diversity & Arts</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Placements Section -->
+    <section id="placements" class="py-24 bg-gray-50 reveal">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-4 py-1 rounded-full text-sm mb-4">CAREER & PLACEMENTS</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Launchpad for Your Career</h2>
+                <p class="text-gray-600 text-lg">Our dedicated placement cell ensures you get the best start to your professional journey.</p>
+            </div>
+
+            <!-- Stats Boxes -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-white p-8 rounded-2xl shadow-sm text-center border border-gray-100">
+                    <div class="text-5xl font-black text-brand-900 mb-2">42<span class="text-3xl text-accent-500">LPA</span></div>
+                    <p class="text-gray-500 font-semibold uppercase tracking-wider text-sm">Highest Package</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm text-center border border-gray-100 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-accent-500"></div>
+                    <div class="text-5xl font-black text-brand-900 mb-2">8.5<span class="text-3xl text-gray-400">LPA</span></div>
+                    <p class="text-gray-500 font-semibold uppercase tracking-wider text-sm">Average Package</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm text-center border border-gray-100">
+                    <div class="text-5xl font-black text-brand-900 mb-2">350<span class="text-3xl text-accent-500">+</span></div>
+                    <p class="text-gray-500 font-semibold uppercase tracking-wider text-sm">Offers Generated</p>
+                </div>
+            </div>
+
+            <!-- Top Recruiters (Mockup styling) -->
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-8">Top Recruiting Partners</h3>
+            <div class="flex flex-wrap justify-center gap-6 items-center opacity-70">
+                <!-- Using FontAwesome icons as mock logos for simplicity and self-containment -->
+                <div class="flex items-center text-2xl font-bold text-gray-700 bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-100"><i class="fab fa-google text-blue-500 mr-2"></i> Google</div>
+                <div class="flex items-center text-2xl font-bold text-gray-700 bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-100"><i class="fab fa-microsoft text-blue-600 mr-2"></i> Microsoft</div>
+                <div class="flex items-center text-2xl font-bold text-gray-700 bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-100"><i class="fab fa-amazon text-yellow-600 mr-2"></i> Amazon</div>
+                <div class="flex items-center text-2xl font-bold text-gray-700 bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-100"><i class="fab fa-apple text-gray-800 mr-2"></i> Apple</div>
+                <div class="flex items-center text-2xl font-bold text-gray-700 bg-white px-6 py-4 rounded-lg shadow-sm border border-gray-100"><i class="fas fa-microchip text-blue-800 mr-2"></i> Intel</div>
+            </div>
+
+            <!-- Testimonial -->
+            <div class="mt-16 bg-brand-900 rounded-3xl p-8 md:p-12 text-center text-white relative shadow-xl max-w-4xl mx-auto">
+                <i class="fas fa-quote-left text-4xl text-accent-500 opacity-50 absolute top-8 left-8"></i>
+                <p class="text-xl md:text-2xl font-light italic mb-8 relative z-10">"The curriculum and the practical exposure provided here bridged the gap between academia and industry. The placement training was phenomenal and helped me crack my dream job at Microsoft."</p>
+                <div class="flex items-center justify-center flex-col">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Student" class="w-16 h-16 rounded-full border-2 border-accent-500 mb-3">
+                    <h5 class="font-bold text-lg">Sarah Jenkins</h5>
+                    <p class="text-gray-400 text-sm">B.Tech CS, Class of 2025 • SDE at Microsoft</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research & Innovation -->
+    <section id="research" class="py-24 bg-white reveal">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row justify-between items-center mb-16 gap-8">
+                <div class="lg:w-2/3">
+                    <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-4 py-1 rounded-full text-sm mb-4">RESEARCH</div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Driving Innovation</h2>
+                    <p class="text-gray-600 text-lg">Our state-of-the-art incubation center and research labs provide the perfect ecosystem for building tomorrow's technology today.</p>
+                </div>
+                <div>
+                    <button class="border-2 border-brand-900 text-brand-900 font-bold px-6 py-3 rounded-lg hover:bg-brand-900 hover:text-white transition duration-300 whitespace-nowrap">
+                        Explore Publications
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group cursor-pointer">
+                    <div class="overflow-hidden rounded-2xl mb-4 h-56">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Lab" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-900 transition">AI & Robotics Lab</h3>
+                    <p class="text-gray-600 text-sm">Pioneering research in autonomous systems and applied machine learning algorithms for healthcare.</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="overflow-hidden rounded-2xl mb-4 h-56">
+                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Incubator" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-900 transition">Startup Incubation Center</h3>
+                    <p class="text-gray-600 text-sm">Supporting student-led startups with seed funding, mentorship, and workspace infrastructure.</p>
+                </div>
+                <div class="group cursor-pointer">
+                    <div class="overflow-hidden rounded-2xl mb-4 h-56">
+                        <img src="https://images.unsplash.com/photo-1517976487492-5750f3195933?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Renewable" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-brand-900 transition">Center for Green Energy</h3>
+                    <p class="text-gray-600 text-sm">Developing sustainable energy solutions and smart grid technologies for urban environments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Map -->
+    <section id="contact" class="bg-gray-900 py-0 relative reveal">
+        <div class="flex flex-col lg:flex-row">
+            <!-- Form Area -->
+            <div class="lg:w-1/2 p-12 md:p-24 bg-brand-900 text-white">
+                <div class="inline-block bg-white/10 text-accent-500 font-semibold px-4 py-1 rounded-full text-sm mb-4 border border-white/10">CONTACT US</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-8">Get in Touch</h2>
+                
+                <div class="space-y-6 mb-12">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt text-accent-500 text-xl w-8 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-1">Campus Address</h4>
+                            <p class="text-gray-400">123 Education Boulevard, Tech City<br>Knowledge Park, NY 10001</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-phone-alt text-accent-500 text-xl w-8 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-1">Phone</h4>
+                            <p class="text-gray-400">+1 (800) 123-4567<br>+1 (800) 123-4568 (Admissions)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-envelope text-accent-500 text-xl w-8 mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-1">Email</h4>
+                            <p class="text-gray-400">info@globalinstitute.edu<br>admissions@globalinstitute.edu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Socials -->
+                <div>
+                    <h4 class="font-bold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent-500 hover:text-brand-900 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent-500 hover:text-brand-900 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent-500 hover:text-brand-900 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-accent-500 hover:text-brand-900 transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Placeholder -->
+            <div class="lg:w-1/2 min-h-[400px] bg-gray-200 relative">
+                <!-- Fallback image/styling simulating a map -->
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center">
+                    <div class="absolute inset-0 bg-brand-900/40 mix-blend-multiply"></div>
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <div class="bg-white p-4 rounded-xl shadow-2xl text-center cursor-pointer hover:scale-105 transition">
+                            <i class="fas fa-map-pin text-4xl text-accent-500 mb-2"></i>
+                            <p class="font-bold text-brand-900">View on Google Maps</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800 text-center text-sm">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <p>&copy; 2026 Global Institute of Technology & Sciences. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a href="#" class="hover:text-white transition">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- MODALS -->
+
+    <!-- Student Portal Login Modal -->
+    <div id="login-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center">
+        <div class="absolute inset-0 bg-brand-900/80 backdrop-blur-sm" onclick="closeModal('login-modal')"></div>
+        <div class="modal-content bg-white w-full max-w-md rounded-2xl shadow-2xl relative z-10 overflow-hidden">
+            <div class="absolute top-4 right-4">
+                <button onclick="closeModal('login-modal')" class="text-gray-400 hover:text-gray-800 focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="bg-brand-900 p-8 text-center text-white">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-brand-900 text-2xl shadow-inner">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Student Portal</h3>
+                <p class="text-brand-300 text-sm mt-1">Access Marks, Attendance & Timetable</p>
+            </div>
+            
+            <div class="p-8">
+                <form onsubmit="event.preventDefault(); alert('Login Demo Submitted'); closeModal('login-modal');">
+                    <div class="mb-5">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="rollno">Roll Number / Enrollment ID</label>
+                        <input class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-brand-900 focus:ring-1 focus:ring-brand-900 transition" id="rollno" type="text" placeholder="e.g. CS24001" required>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-gray-700 text-sm font-bold" for="password">Password</label>
+                            <a href="#" class="text-xs text-brand-900 font-semibold hover:underline">Forgot Password?</a>
+                        </div>
+                        <input class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-700 focus:outline-none focus:border-brand-900 focus:ring-1 focus:ring-brand-900 transition" id="password" type="password" placeholder="********" required>
+                    </div>
+                    <button class="w-full bg-brand-900 hover:bg-brand-800 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md mb-4" type="submit">
+                        Sign In securely
+                    </button>
+                    <p class="text-center text-xs text-gray-500">
+                        For faculty/staff login, <a href="#" class="text-brand-900 font-semibold">click here</a>.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- General Apply/Course Modal Placeholder -->
+    <div id="course-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" onclick="closeModal('course-modal')"></div>
+        <div class="modal-content bg-white w-full max-w-3xl rounded-2xl shadow-2xl relative z-10 overflow-hidden">
+            <button onclick="closeModal('course-modal')" class="absolute top-4 right-4 z-20 text-gray-500 hover:text-gray-900 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="p-8 md:p-12">
+                <div class="inline-block bg-blue-50 text-brand-900 font-semibold px-3 py-1 rounded text-xs mb-3">PROGRAM DETAILS</div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">B.Tech Computer Science</h2>
+                <p class="text-gray-500 mb-6">4 Years • Full Time • 120 Seats • Semester System</p>
+                
+                <h4 class="font-bold text-lg mb-2 border-b pb-2">Course Overview</h4>
+                <p class="text-gray-700 mb-6 text-sm leading-relaxed">
+                    The Department of Computer Science & Engineering offers a dynamic program that equips students with core foundations and advanced concepts in computing. The curriculum is regularly updated to include AI, Machine Learning, Data Science, and Cloud Architecture to meet industry demands.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-brand-900 mb-2"><i class="fas fa-book-open mr-2"></i> Key Subjects</h4>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li>Data Structures & Algorithms</li>
+                            <li>Database Management Systems</li>
+                            <li>Artificial Intelligence & ML</li>
+                            <li>Operating Systems</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-brand-900 mb-2"><i class="fas fa-briefcase mr-2"></i> Career Prospects</h4>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                            <li>Software Development Engineer</li>
+                            <li>Data Scientist</li>
+                            <li>Cloud Solutions Architect</li>
+                            <li>Cybersecurity Analyst</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="closeModal('course-modal'); openModal('apply-modal')" class="px-6 py-3 bg-brand-900 text-white font-bold rounded-lg hover:bg-brand-800 transition">
+                        Apply for this course
+                    </button>
+                    <button class="px-6 py-3 border border-gray-300 text-gray-700 font-bold rounded-lg hover:bg-gray-50 transition">
+                        Download Syllabus PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Apply Now Modal -->
+    <div id="apply-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" onclick="closeModal('apply-modal')"></div>
+        <div class="modal-content bg-white w-full max-w-2xl rounded-2xl shadow-2xl relative z-10 overflow-hidden">
+            <button onclick="closeModal('apply-modal')" class="absolute top-4 right-4 z-20 text-gray-500 hover:text-gray-900">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Application Form 2027</h2>
+                <p class="text-gray-500 mb-6 text-sm">Please fill in your details to start the application process.</p>
+                
+                <form class="space-y-4" onsubmit="event.preventDefault(); alert('Application Submitted Successfully!'); closeModal('apply-modal');">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">First Name *</label>
+                            <input type="text" required class="w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-brand-900 focus:border-brand-900 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">Last Name *</label>
+                            <input type="text" required class="w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-brand-900 focus:border-brand-900 outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Email Address *</label>
+                        <input type="email" required class="w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-brand-900 focus:border-brand-900 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Select Course *</label>
+                        <select required class="w-full px-3 py-2 border rounded-md focus:ring-1 focus:ring-brand-900 focus:border-brand-900 outline-none bg-white">
+                            <option value="">-- Choose a Program --</option>
+                            <option>B.Tech Computer Science</option>
+                            <option>B.Tech Mechanical</option>
+                            <option>MBA</option>
+                        </select>
+                    </div>
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-accent-500 text-brand-900 font-bold py-3 rounded-md hover:bg-accent-600 transition">Proceed to Next Step</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass-nav', 'shadow-sm', 'py-0');
+                navbar.classList.remove('top-10');
+                navbar.classList.add('top-0');
+            } else {
+                navbar.classList.remove('glass-nav', 'shadow-sm', 'py-0');
+                navbar.classList.add('top-10');
+                navbar.classList.remove('top-0');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const reveal = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Trigger on load
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        let hasCounted = false;
+
+        const runCounters = () => {
+            counters.forEach(counter => {
+                counter.innerText = '0';
+                const target = +counter.getAttribute('data-target');
+                const updateCounter = () => {
+                    const c = +counter.innerText;
+                    const increment = target / 50; // Adjust speed here
+                    
+                    if (c < target) {
+                        counter.innerText = `${Math.ceil(c + increment)}`;
+                        setTimeout(updateCounter, 30);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        };
+
+        // Trigger counter when in view
+        const statsSection = document.getElementById('home'); // or where stats are
+        window.addEventListener('scroll', () => {
+            if(hasCounted) return;
+            const top = statsSection.getBoundingClientRect().bottom - 200;
+            if(top < window.innerHeight && top > 0) {
+                runCounters();
+                hasCounted = true;
+            }
+        });
+        
+        // Modal functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') {
+                const activeModals = document.querySelectorAll('.modal.active');
+                activeModals.forEach(m => closeModal(m.id));
+            }
+        });
+
+        // Gallery Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-brand-900', 'text-white');
+                    b.classList.add('bg-gray-100', 'text-gray-600');
+                });
+                
+                // Add active class
+                btn.classList.remove('bg-gray-100', 'text-gray-600');
+                btn.classList.add('bg-brand-900', 'text-white');
+
+                const filter = btn.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if(filter === 'all' || item.classList.contains(filter)) {
+                        item.style.display = 'block';
+                        setTimeout(() => item.style.opacity = '1', 50);
+                    } else {
+                        item.style.opacity = '0';
+                        setTimeout(() => item.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
